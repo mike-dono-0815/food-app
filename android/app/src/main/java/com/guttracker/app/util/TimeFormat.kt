@@ -4,9 +4,10 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-private val TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a")
-private val DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMMM d")
+private val TIME_FORMATTER = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+private val DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.ENGLISH)
 
 fun isoToMillis(iso: String?): Long? = iso?.let { Instant.parse(it).toEpochMilli() }
 

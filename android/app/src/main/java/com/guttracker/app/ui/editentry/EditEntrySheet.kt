@@ -28,6 +28,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,8 +83,8 @@ fun EditEntrySheet(container: AppContainer, localId: Long, onDismiss: () -> Unit
             Spacer(Modifier.height(22.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                EditField("Date", dt.toLocalDate().format(DateTimeFormatter.ofPattern("EEE, MMM d")), Modifier.weight(1f)) { showDatePicker = true }
-                EditField("Time", dt.toLocalTime().format(DateTimeFormatter.ofPattern("h:mm a")), Modifier.weight(1f)) { showTimePicker = true }
+                EditField("Date", dt.toLocalDate().format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.ENGLISH)), Modifier.weight(1f)) { showDatePicker = true }
+                EditField("Time", dt.toLocalTime().format(DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)), Modifier.weight(1f)) { showTimePicker = true }
             }
             Spacer(Modifier.height(22.dp))
 

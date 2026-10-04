@@ -28,13 +28,13 @@ class DailyLogRepository(
         SyncScheduler.syncNow(appContext)
     }
 
-    suspend fun updateWellbeing(date: String, rating: Int) {
+    suspend fun updateWellbeing(date: String, rating: Double) {
         val current = currentOrDefault(date)
         dailyLogDao.upsert(current.copy(wellbeingRating = rating, wellbeingLoggedAt = System.currentTimeMillis(), synced = false))
         SyncScheduler.syncNow(appContext)
     }
 
-    suspend fun updateDigestion(date: String, rating: Int) {
+    suspend fun updateDigestion(date: String, rating: Double) {
         val current = currentOrDefault(date)
         dailyLogDao.upsert(current.copy(digestionRating = rating, digestionLoggedAt = System.currentTimeMillis(), synced = false))
         SyncScheduler.syncNow(appContext)
@@ -53,7 +53,7 @@ class DailyLogRepository(
     }
 
     /** The Rating screen batches wellbeing/digestion/tag/notes into one save action rather than syncing per tap. */
-    suspend fun saveRating(date: String, wellbeingRating: Int?, digestionRating: Int?, contextTagId: Int?, notes: String?) {
+    suspend fun saveRating(date: String, wellbeingRating: Double?, digestionRating: Double?, contextTagId: Int?, notes: String?) {
         val current = currentOrDefault(date)
         val now = System.currentTimeMillis()
         dailyLogDao.upsert(

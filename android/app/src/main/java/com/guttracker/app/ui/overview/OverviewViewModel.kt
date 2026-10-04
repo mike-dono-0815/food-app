@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-data class DayPoint(val date: LocalDate, val wellbeing: Int?, val digestion: Int?, val isVacation: Boolean)
+data class DayPoint(val date: LocalDate, val wellbeing: Double?, val digestion: Double?, val isVacation: Boolean)
 
 data class OverviewUiState(
     val windowDays: Int = 30,

@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 
 data class RatingUiState(
     val tags: List<TagEntity> = emptyList(),
-    val wellbeingRating: Int = 7,
-    val digestionRating: Int = 3,
+    val wellbeingRating: Double = 7.0,
+    val digestionRating: Double = 3.0,
     val contextTagId: Int? = null,
     val notes: String = "",
     val loaded: Boolean = false,
@@ -34,8 +34,8 @@ class RatingViewModel(private val container: AppContainer) : ViewModel() {
             val existing = container.dailyLogDao.getByDate(todayKey)
             val homeId = container.tagDao.getHomeTagId()
             _state.value = _state.value.copy(
-                wellbeingRating = existing?.wellbeingRating ?: 7,
-                digestionRating = existing?.digestionRating ?: 3,
+                wellbeingRating = existing?.wellbeingRating ?: 7.0,
+                digestionRating = existing?.digestionRating ?: 3.0,
                 contextTagId = existing?.contextTagId ?: homeId,
                 notes = existing?.notes ?: "",
                 loaded = true,
@@ -43,8 +43,8 @@ class RatingViewModel(private val container: AppContainer) : ViewModel() {
         }
     }
 
-    fun setWellbeing(v: Int) { _state.value = _state.value.copy(wellbeingRating = v) }
-    fun setDigestion(v: Int) { _state.value = _state.value.copy(digestionRating = v) }
+    fun setWellbeing(v: Double) { _state.value = _state.value.copy(wellbeingRating = v) }
+    fun setDigestion(v: Double) { _state.value = _state.value.copy(digestionRating = v) }
     fun setTag(id: Int) { _state.value = _state.value.copy(contextTagId = id) }
     fun setNotes(v: String) { _state.value = _state.value.copy(notes = v) }
 

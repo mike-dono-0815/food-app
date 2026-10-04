@@ -61,7 +61,7 @@ fun OverviewScreen(container: AppContainer) {
         }
 
         ChartCard(title = "Wellbeing", avg = state.wellbeingAvg) {
-            TrendChart(points = state.points, valueOf = { it.wellbeing }, minVal = 1, maxVal = 10, colorScale = AppColors.WellbeingScale, gridValues = listOf(10, 5, 1))
+            TrendChart(points = state.points, valueOf = { it.wellbeing }, minVal = 1.0, maxVal = 10.0, colorScale = AppColors.WellbeingScale, gridValues = listOf(10, 5, 1))
         }
         Row(modifier = Modifier.padding(20.dp, 6.dp, 20.dp, 0.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Box(modifier = Modifier.size(9.dp).clip(RoundedCornerShape(3.dp)).background(AppColors.Vacation))
@@ -69,7 +69,7 @@ fun OverviewScreen(container: AppContainer) {
         }
 
         ChartCard(title = "Digestion", avg = state.digestionAvg) {
-            TrendChart(points = state.points, valueOf = { it.digestion }, minVal = 1, maxVal = 5, colorScale = AppColors.DigestionScale, gridValues = listOf(5, 3, 1))
+            TrendChart(points = state.points, valueOf = { it.digestion }, minVal = 0.0, maxVal = 5.0, colorScale = AppColors.DigestionScale, gridValues = listOf(5, 3, 0))
         }
 
         Spacer(Modifier.height(24.dp))

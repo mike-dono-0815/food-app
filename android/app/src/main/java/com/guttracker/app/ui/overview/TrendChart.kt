@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guttracker.app.ui.theme.AppColors
 import java.time.format.DateTimeFormatter
+import java.util.Locale
+import kotlin.math.roundToInt
 
 @Composable
 fun TrendChart(
     points: List<DayPoint>,
-    valueOf: (DayPoint) -> Int?,
-    minVal: Int,
-    maxVal: Int,
+    valueOf: (DayPoint) -> Double?,
+    minVal: Double,
+    maxVal: Double,
     colorScale: List<Color>,
     gridValues: List<Int>,
 ) {
@@ -49,7 +51,7 @@ fun TrendChart(
         if (n < 2) return@Canvas
 
         fun x(i: Int) = leftPad + plotW * i / (n - 1)
-        fun y(v: Int) = plotH - plotH * (v - minVal).toFloat() / (maxVal - minVal).toFloat()
+        fun y(v: Double) = plotH - plotH * (v - minVal).toFloat() / (maxVal - minVal).toFloat()
 
         // vacation shading — contiguous runs
         var runStart = -1
@@ -68,13 +70,13 @@ fun TrendChart(
 
         // gridlines + axis labels
         gridValues.forEach { v ->
-            val yy = y(v)
+            val yy = y(v.toDouble())
             drawLine(gridColor, Offset(leftPad, yy), Offset(size.width, yy), strokeWidth = 1.dp.toPx())
             drawContext.canvas.nativeCanvas.drawText(v.toString(), leftPad - 8.dp.toPx(), yy + 8f, axisPaint)
         }
 
         // area + line, broken at null gaps
-        var segment = mutableListOf<Pair<Int, Int>>() // index, value
+        var segment = mutableListOf<Pair<Int, Double>>() // index, value
         fun flushSegment() {
             if (segment.size >= 2) {
                 val path = androidx.compose.ui.graphics.Path()
@@ -102,11 +104,12 @@ fun TrendChart(
         // dots
         points.forEachIndexed { i, p ->
             val v = valueOf(p) ?: return@forEachIndexed
-            drawCircle(colorScale[(v - minVal).coerceIn(0, colorScale.size - 1)], radius = 3.dp.toPx(), center = Offset(x(i), y(v)))
+            val colorIndex = (v - minVal).roundToInt().coerceIn(0, colorScale.size - 1)
+            drawCircle(colorScale[colorIndex], radius = 3.dp.toPx(), center = Offset(x(i), y(v)))
         }
 
         // date labels: first / last only — a middle label collided with these on narrow screens
-        val fmt = DateTimeFormatter.ofPattern("MMM d")
+        val fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH)
         drawContext.canvas.nativeCanvas.drawText(points.first().date.format(fmt), leftPad, size.height, dateLabelPaint)
         val endPaint = Paint(dateLabelPaint).apply { textAlign = Paint.Align.RIGHT }
         drawContext.canvas.nativeCanvas.drawText(points.last().date.format(fmt), size.width, size.height, endPaint)

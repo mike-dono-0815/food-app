@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemSheet(container: AppContainer, onDismiss: () -> Unit) {
+fun AddItemSheet(container: AppContainer, onDismiss: () -> Unit, timestampMillis: Long = System.currentTimeMillis()) {
     var name by remember { mutableStateOf("") }
     var saveToShortlist by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -84,13 +84,13 @@ fun AddItemSheet(container: AppContainer, onDismiss: () -> Unit) {
                         if (saveToShortlist) {
                             container.catalogRepository.createFoodItem(trimmed).fold(
                                 onSuccess = { item ->
-                                    container.entryRepository.createEntry(System.currentTimeMillis(), "food", item.id, null)
+                                    container.entryRepository.createEntry(timestampMillis, "food", item.id, null)
                                     onDismiss()
                                 },
                                 onFailure = { error = "Couldn't save — check your connection and try again"; saving = false },
                             )
                         } else {
-                            container.entryRepository.createEntry(System.currentTimeMillis(), "food", null, trimmed)
+                            container.entryRepository.createEntry(timestampMillis, "food", null, trimmed)
                             onDismiss()
                         }
                     }

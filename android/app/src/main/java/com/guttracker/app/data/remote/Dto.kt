@@ -6,9 +6,9 @@ data class EntryDto(val id: Int, val timestamp: String, val type: String, val it
 data class DailyLogDto(
     val date: String,
     val medicationTakenAt: String?,
-    val wellbeingRating: Int?,
+    val wellbeingRating: Double?,
     val wellbeingLoggedAt: String?,
-    val digestionRating: Int?,
+    val digestionRating: Double?,
     val digestionLoggedAt: String?,
     val contextTagId: Int?,
     val notes: String?,

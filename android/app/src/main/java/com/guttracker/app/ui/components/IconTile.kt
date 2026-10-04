@@ -8,8 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,24 +27,33 @@ import com.guttracker.app.R
 import com.guttracker.app.ui.icons.ItemIcons
 import com.guttracker.app.ui.theme.AppColors
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IconTile(name: String, category: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val bg = if (category == "drink") AppColors.AccentSoft else AppColors.SageSoft
     val ink = if (category == "drink") AppColors.Accent else AppColors.Sage
     val icon = ItemIcons.iconFor(name)
 
-    Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(16.dp))
-            .background(bg)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center,
+    // TooltipBox wires up long-press-to-show on its content automatically (see
+    // BasicTooltipBox's handleGestures), so the inner clickable only needs the tap handler.
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text(name) } },
+        state = rememberTooltipState(),
     ) {
-        if (icon != null) {
-            Image(painter = painterResource(icon), contentDescription = name)
-        } else {
-            Text(ItemIcons.monogramFor(name), color = ink, fontWeight = FontWeight.ExtraBold, fontSize = 12.5.sp)
+        Box(
+            modifier = modifier
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(bg)
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (icon != null) {
+                Image(painter = painterResource(icon), contentDescription = name)
+            } else {
+                Text(ItemIcons.monogramFor(name), color = ink, fontWeight = FontWeight.ExtraBold, fontSize = 12.5.sp)
+            }
         }
     }
 }

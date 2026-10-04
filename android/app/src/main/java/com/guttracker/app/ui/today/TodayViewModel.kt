@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guttracker.app.AppContainer
 import com.guttracker.app.data.local.ItemEntity
+import com.guttracker.app.ui.components.EntryDisplay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -11,15 +12,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-data class EntryDisplay(val localId: Long, val timestampMillis: Long, val name: String)
-
 data class TodayUiState(
     val drinks: List<ItemEntity> = emptyList(),
     val foods: List<ItemEntity> = emptyList(),
     val loggedToday: List<EntryDisplay> = emptyList(),
     val medicationTakenAt: Long? = null,
-    val wellbeingRating: Int? = null,
-    val digestionRating: Int? = null,
+    val wellbeingRating: Double? = null,
+    val digestionRating: Double? = null,
 )
 
 class TodayViewModel(private val container: AppContainer) : ViewModel() {

@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.guttracker.app.AppContainer
 import com.guttracker.app.R
+import com.guttracker.app.ui.history.HistoryScreen
 import com.guttracker.app.ui.overview.OverviewScreen
 import com.guttracker.app.ui.rating.RatingScreen
 import com.guttracker.app.ui.theme.AppColors
@@ -28,6 +29,7 @@ import com.guttracker.app.ui.today.TodayScreen
 
 private const val ROUTE_TODAY = "today"
 private const val ROUTE_OVERVIEW = "overview"
+private const val ROUTE_HISTORY = "history"
 private const val ROUTE_RATING = "rating"
 
 @Composable
@@ -35,7 +37,7 @@ fun AppNavHost(container: AppContainer) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val showTabBar = currentRoute == ROUTE_TODAY || currentRoute == ROUTE_OVERVIEW
+    val showTabBar = currentRoute == ROUTE_TODAY || currentRoute == ROUTE_OVERVIEW || currentRoute == ROUTE_HISTORY
 
     Scaffold(
         containerColor = AppColors.Background,
@@ -45,6 +47,7 @@ fun AppNavHost(container: AppContainer) {
                     currentRoute = currentRoute,
                     onToday = { navController.navigate(ROUTE_TODAY) { popUpTo(ROUTE_TODAY) { inclusive = true } } },
                     onOverview = { navController.navigate(ROUTE_OVERVIEW) { popUpTo(ROUTE_TODAY) } },
+                    onHistory = { navController.navigate(ROUTE_HISTORY) { popUpTo(ROUTE_TODAY) } },
                 )
             }
         },
@@ -56,6 +59,9 @@ fun AppNavHost(container: AppContainer) {
             composable(ROUTE_OVERVIEW) {
                 OverviewScreen(container = container)
             }
+            composable(ROUTE_HISTORY) {
+                HistoryScreen(container = container)
+            }
             composable(ROUTE_RATING) {
                 RatingScreen(container = container, onBack = { navController.popBackStack() })
             }
@@ -64,7 +70,7 @@ fun AppNavHost(container: AppContainer) {
 }
 
 @Composable
-private fun BottomTabBar(currentRoute: String?, onToday: () -> Unit, onOverview: () -> Unit) {
+private fun BottomTabBar(currentRoute: String?, onToday: () -> Unit, onOverview: () -> Unit, onHistory: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,6 +80,7 @@ private fun BottomTabBar(currentRoute: String?, onToday: () -> Unit, onOverview:
     ) {
         TabItem(Modifier.weight(1f), R.drawable.ic_home_tab, "Today", currentRoute == ROUTE_TODAY, onToday)
         TabItem(Modifier.weight(1f), R.drawable.ic_chart_tab, "Overview", currentRoute == ROUTE_OVERVIEW, onOverview)
+        TabItem(Modifier.weight(1f), R.drawable.ic_calendar_tab, "History", currentRoute == ROUTE_HISTORY, onHistory)
     }
 }
 

@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class DailyLogEntity(
     @PrimaryKey val date: String, // "YYYY-MM-DD"
     val medicationTakenAt: Long? = null,
-    val wellbeingRating: Int? = null,
+    val wellbeingRating: Double? = null,
     val wellbeingLoggedAt: Long? = null,
-    val digestionRating: Int? = null,
+    val digestionRating: Double? = null,
     val digestionLoggedAt: Long? = null,
     val contextTagId: Int? = null,
     val notes: String? = null,

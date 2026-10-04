@@ -8,6 +8,10 @@ interface EntryDao {
     @Query("SELECT * FROM entries WHERE timestamp >= :startMillis AND timestamp < :endMillis AND pendingDelete = 0 ORDER BY timestamp ASC")
     fun observeForRange(startMillis: Long, endMillis: Long): Flow<List<EntryEntity>>
 
+    /** Distinct local calendar days (as "YYYY-MM-DD", matching LocalDate.toString()) that have at least one logged entry. */
+    @Query("SELECT DISTINCT date(timestamp / 1000, 'unixepoch', 'localtime') FROM entries WHERE pendingDelete = 0")
+    fun observeDistinctEntryDates(): Flow<List<String>>
+
     @Query("SELECT * FROM entries WHERE localId = :localId")
     suspend fun getByLocalId(localId: Long): EntryEntity?
 
